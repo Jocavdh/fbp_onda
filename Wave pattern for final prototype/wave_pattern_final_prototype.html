@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  
+
+<p> // Function in D3 JS to generate and customize patterns based on a transformed sine graph. </p>
+<p> // Results can be exported as SVG. </p> 
+<p> // based on Philip Davis - Moire - https://bl.ocks.org/philipcdavis/2b626bdef4133921615a5e4fbb921e70 </p>
+<p> // based on Chuck Grimmett - Make Your Own Sol LeWitt 614 - http://bl.ocks.org/cagrimmett/4a639fc79bbaa038849c865b99b1ddcc </p>
+
+    <meta charset="utf-8">
+    <title>Pattern</title>
+    <style>
+      body {
+        background-color: #aeaeae;
+      }
+      .container {
+        background-color: white;
+        margin: 0 auto;
+        display: block;
+      }
+    </style>
+	<style>
+
+.ticks {
+  font: 10px sans-serif;
+}
+
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  stroke: #ddd;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+  cursor: crosshair;
+}
+
+.handle {
+  fill: #fff;
+  stroke: #000;
+  stroke-opacity: 0.5;
+  stroke-width: 1.25px;
+}
+
+</style>
+  </head>
+  <body>
+    <div id="chart"></div>
+	<div id="controls">
+	<div class="inputs">
+		<form>
+			Fill in range: 0 - <output name="paddingOutput" id="paddingOutputId">15</output> <input type="range" name="paddingInput" id="paddingInputId" value="15" min="7" max="70" oninput="paddingOutputId.value = paddingInputId.value">
+			</form>
+		<a href="#" id="download">Download</a>
+	</div>
+</div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script>
+    var width = 530;
+    var height = 530;
+    var padding = {top: 30, right: 30, bottom: 30, left: 30};
+
+    
+
+	var data2 = document.getElementById("paddingInputId");
+	
+	var svg = d3.select("#chart").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("class", "container")
+      .append("g")
+      .attr("transform", "translate("+width / 2+", "+height / 2+")");
+	
+	function sol614() {
+	
+	var data = d3.range(data2.value).map(function(d) {
+     return d;
+    })
+	
+	var angle = d3.scaleLinear()
+    .domain([0, d3.max(data)])
+    .range([0, -2 * Math.PI]);
+
+    var radius = d3.scaleLinear()
+        .domain([0, d3.max(data)])
+        .range([100, 200]);
+	    var radialLine = d3.radialLine()
+      .angle(function(d) { return angle(d)})
+      .radius(function(d) { return radius(5 * Math.sin(d^10) ) })
+      .curve(d3.curveBasisClosed);
+	
+	
+	
+
+	
+    var pattern = svg.selectAll("path")
+      .data(Array(10).fill(1))
+      .enter()
+      .append("path").transition().delay(500).delay(function(d,i){ return 20*i; }).duration(750)
+      .attr("class", "pattern")
+	  .attr("d", radialLine(data))
+	  .attr("class", function(d,i) {
+        if (i===0) {
+          return "core";
+        } else {
+          return "layers"
+        }
+		})
+      .attr("fill", function(d,i) {
+        if (i===0) {
+          return "#000000";
+        } else {
+          return "none"
+        }
+		})
+      .attr("stroke", function(d,i) {
+        if (i===0) {
+          return "none";
+        } else {
+          return "#000000"
+        }
+      })
+      
+	  .attr("transform", function(d,i) {
+        return "scale("+ (i+1) / 5 +")" // controls scaling across shapes
+      })
+      .attr("stroke-width", 5);
+	  
+	  }
+	  
+	  //Run on first load
+sol614();
+
+$( "#paddingInputId" ).on("input", function() {
+
+	d3.selectAll(".core").transition().duration(75).attr("transform", "scale("+ 1 +")");
+	d3.selectAll(".layers").transition().duration(75).attr("transform", "scale("+ 0.75 +")");
+	d3.selectAll("path").transition().delay(5).remove();
+	d3.selectAll("svg").transition().delay(5).on("end", sol614);
+	
+
+
+});
+
+d3.select("#download")
+      .on("mouseover", writeDownloadLink);
+
+  function writeDownloadLink(){
+      var html = d3.select("svg")
+          .attr("title", "svg_title")
+          .attr("version", 1.1)
+          .attr("xmlns", "http://www.w3.org/2000/svg")
+          .node().parentNode.innerHTML;
+
+      d3.select(this)
+          .attr("href-lang", "image/svg+xml")
+          .attr("href", "data:image/svg+xml;base64,\n" + btoa(html))
+          .on("mousedown", function(){
+              if(event.button != 2){
+                  d3.select(this)
+                      .attr("href", null)
+                      .html("Use right click");
+              }
+          })
+          .on("mouseout", function(){
+              d3.select(this)
+                  .html("Download");
+          });
+  };
+	  
+	  
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="libraries/p5.svg.js"></script>
+  <style> body {padding: 0; margin: 0;} </style>
+</head>
+
+<body>
+  <script language="javascript" type="text/javascript">
+ // The function scales the pattern based on the canvas size
+// Amsterdam School pattern in code, based on the work of Cornelis van der Sluys
+
+function setup() {
+  createCanvas(2400, 4800); // 1:2 ratio
+  background('#7f7247'); // Buscabulla
+  noSmooth();
+  noStroke();
+  ellipseMode(CORNER); // to match the default rectMode()
+}
+
+
+
+
+function draw() {
+  surface = width * height;
+  surfaceCellfactor = 600; // surface of patterncell in relation to total surface
+
+  // compute size based on surface of cell and aspect ratio of cell
+  var w = (surface / surfaceCellfactor) / 60;
+  var h = (surface / surfaceCellfactor) / 40;
+
+  for (col = 0; col < 20; col++) {
+
+    for (row = 0; row < 30; row++) {
+
+      if ((col) % 2 == 0) {
+        fill(255,0,0,6); // Pinking
+        rect(w * col + w * 17/30, h * row, w * 1/30, h);
+
+        fill('#d8c991'); // Pinking
+        rect(w * col,  h * row, w * 1/5, h * 0.1);
+
+        fill('#000000'); // Pinking
+        rect(w * col,  h * row + h*0.1, w * 1/5, h * 0.9);
+        rect(w * col, h * row + h * 2/5, w, h * 1/5);
+
+        rect(w * col, h * row + h * 8/30, w, h * 1/30);
+        rect(w * col, h * row + h * 10/30, w, h * 1/30);
+        rect(w * col, h * row + h * 19/30, w, h * 1/30);
+
+        rect(w * col + w * 28/30, h * row, w * 1/30, h);
+        rect(w * col + w * 26/30, h * row, w * 1/30, h);
+
+
+
+
+      }
+
+      else {
+        fill(255,0,0,6); // Pinking
+        rect(w * col + w * 17/30, h * row, w * 1/30, h);
+
+        fill('#000000'); // Pinking
+        rect(w * col,  h * row, w * 1/5, h * 0.60);
+
+        fill('#d8c991'); // Pinking
+        rect(w * col,  h * row + h * 0.6, w * 1/5, h * 0.1);
+
+        fill('#000000'); // Pinking
+        rect(w * col,  h * row + h * 0.7, w * 1/5, h * 0.3);
+
+        rect(w * col, h * row + h * 4/5, w, h * 1/5);
+
+
+        rect(w * col, h * row + h * 19/30, w, h * 1/30);
+        rect(w * col, h * row + h * 21/30, w, h * 1/30);
+
+        rect(w * col + w * 28/30, h * row, w * 1/30, h);
+        rect(w * col + w * 26/30, h * row, w * 1/30, h);
+
+        rect(w * col, h * row + h * 1/30, w, h * 1/30);
+
+        fill('#d8c991'); // Pinking
+        rect(w * col,  h * row + h * 0.6, w * 1/5, h * 0.1);
+      }
+
+    }
+
+  }
+
+}
+
+  </script>
+</body>
+</html>
