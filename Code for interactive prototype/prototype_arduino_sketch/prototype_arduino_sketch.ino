@@ -160,7 +160,7 @@ void loop() {
       ledOn();
 
       if (touchState > threshold) { // enter next state and save current time
-        Hardpresssstate = 0;
+        HardpressState = 0;
       }
 
       if (touchState < threshold && HardpressState == 0) { // enter next state and save current time
@@ -304,7 +304,8 @@ void sensorValues(unsigned long thisMillis) {
   if (thisMillis - previousSerialMillis >= SerialInterval) {
     // yup, it's time!
     //Print to the serial port
-    Serial.println(String("outputV=") + outputV + "\tug/m3=" + ugm3 + "\tAQI=" + aqi + "\tCO2=" + ppm  + "\tgradeInfo=" + gradeInfo + "\tdist=" + touchState);
+    Serial.println(String("outputV=") + outputV + "\tug/m3=" + ugm3 + "\tAQI=" + aqi + "\tCO2=" + ppm  + "\tgradeInfo=" + gradeInfo + "\tdist=" + 
+                  );
     // reset millis for the next iteration (fade timer only)
     previousSerialMillis = thisMillis;
   }
